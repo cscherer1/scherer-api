@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Scherer.Api.Features.Projects.Dtos;
 using Scherer.Api.Features.Projects.Repositories;
+using Scherer.Api.Features.Projects.Models;
+using Scherer.Api.Features.Projects.Services;
 
 namespace Scherer.Api.Features.Projects.Controllers;
 
@@ -18,4 +20,13 @@ public class ProjectsController(IProjectsRepository repo) : ControllerBase
         );
         return Ok(dto);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Project>> GetById(string id, CancellationToken ct)
+    {
+        var found = await repo.GetByIdAsync(id, ct);
+        if (found is null) return NotFound();
+        return Ok(found);
+    }
+
 }

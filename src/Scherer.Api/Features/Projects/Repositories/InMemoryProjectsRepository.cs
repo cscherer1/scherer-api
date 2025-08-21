@@ -1,5 +1,6 @@
 namespace Scherer.Api.Features.Projects.Repositories;
 
+using System.Linq;
 using Scherer.Api.Features.Projects.Models;
 
 public class InMemoryProjectsRepository : IProjectsRepository
@@ -55,4 +56,15 @@ public class InMemoryProjectsRepository : IProjectsRepository
             return Task.FromResult(project);
         }
     }
+
+    public Task<Project?> GetByIdAsync(string id, CancellationToken ct = default)
+    {
+        lock (_lock)
+        {
+            var match = _items.FirstOrDefault(p =>
+                p.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+            return Task.FromResult(match);
+        }
+    }
+
 }
