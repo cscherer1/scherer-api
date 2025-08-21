@@ -4,7 +4,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 // CORS: allow your site + local dev (adjust later as needed)
 builder.Services.AddCors(options =>
 {
@@ -17,6 +16,7 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -30,5 +30,6 @@ app.UseHttpsRedirection();
 app.UseCors();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
