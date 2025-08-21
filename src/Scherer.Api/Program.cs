@@ -1,10 +1,13 @@
+using Scherer.Api.Features.Projects.Repositories;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // MVC controllers + Swagger (OpenAPI)
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// CORS: allow your site + local dev (adjust later as needed)
+// CORS: allow site + local dev (to be adjusted later as needed)
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(p => p
@@ -17,6 +20,7 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod());
 });
 builder.Services.AddHealthChecks();
+builder.Services.AddSingleton<IProjectsRepository, InMemoryProjectsRepository>();
 
 var app = builder.Build();
 

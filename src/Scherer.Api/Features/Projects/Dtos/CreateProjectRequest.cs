@@ -1,7 +1,6 @@
-namespace Scherer.Api.Features.Projects;
+namespace Scherer.Api.Features.Projects.Dtos;
 
-public record Project(
-    string Id,
+public record CreateProjectRequest(
     string Title,
     string Blurb,
     List<string> Tech,
