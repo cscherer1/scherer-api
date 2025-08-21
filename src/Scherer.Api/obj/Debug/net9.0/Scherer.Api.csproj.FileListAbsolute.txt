@@ -33,3 +33,4 @@ D:\Development\scherer-api\src\Scherer.Api\obj\Debug\net9.0\ref\Scherer.Api.dll
 D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Development\scherer-api\src\Scherer.Api\obj\Debug\net9.0\Scherer.Api.sourcelink.json

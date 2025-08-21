@@ -11,7 +11,9 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(p => p
         .WithOrigins(
             "http://localhost:5173",
-            "https://christianscherer.dev")
+            "http://127.0.0.1:5173",
+            "https://christianscherer.dev",
+            "https://www.christianscherer.dev")
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
