@@ -139,51 +139,12 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 var app = builder.Build();
 
-// Create the DB file and (optionally) seed it on first run
+// Create the DB file and (optionally) seed it on first run in Dev
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
-
-    if (!db.Projects.Any())
-    {
-        db.Projects.AddRange(
-            new ProjectEntity
-            {
-                Id = "adobe-licensing",
-                Title = "Adobe License Automation",
-                Blurb = "Automated license lifecycle to cut costs & admin toil.",
-                Year = 2025,
-                Role = "Lead Developer",
-                Link = null,
-                Repo = null,
-                TechJson = JsonSerializer.Serialize(new[] { "C#", "Azure Functions", "PowerShell" })
-            },
-            new ProjectEntity
-            {
-                Id = "server-patching",
-                Title = "Monthly Server Patching Orchestrator",
-                Blurb = "Config-driven scheduling engine with RITM/SCTASK generation, approvals, and status rollups.",
-                Year = 2025,
-                Role = "Solutions Architect",
-                Link = null,
-                Repo = null,
-                TechJson = JsonSerializer.Serialize(new[] { "ServiceNow", "Workflow", "PowerShell" })
-            },
-            new ProjectEntity
-            {
-                Id = "dfs-archive",
-                Title = "DFS Archive Request Pipeline",
-                Blurb = "MID Server + PowerShell pipeline with guarded concurrency and throttling for bulk archive jobs.",
-                Year = 2025,
-                Role = "Lead Developer",
-                Link = null,
-                Repo = null,
-                TechJson = JsonSerializer.Serialize(new[] { "MID Server", "PowerShell", "Governance" })
-            }
-        );
-        db.SaveChanges();
-    }
+    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DbInit");
+    await DbInitializer.MigrateAndSeedAsync(db, logger, app.Environment.IsDevelopment());
 }
 
 
