@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Scherer.Api.Features.Projects.Dtos;
 using Scherer.Api.Features.Projects.Repositories;
 using Scherer.Api.Features.Projects.Models;
@@ -29,6 +30,7 @@ public class ProjectsController(IProjectsRepository repo) : ControllerBase
         return Ok(found);
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPost]
     public async Task<ActionResult<Project>> Create([FromBody] CreateProjectRequest req, CancellationToken ct)
     {
