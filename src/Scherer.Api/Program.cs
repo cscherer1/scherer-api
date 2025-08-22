@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.RateLimiting;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using System.Threading.RateLimiting;
+using Microsoft.EntityFrameworkCore;
+using Scherer.Api.Data;
+using System.Text.Json; // for optional seed
 
 
 static SymmetricSecurityKey BuildSigningKey(IConfiguration config)
@@ -86,7 +89,8 @@ builder.Services.AddHealthChecks()
         }
     });
 
-builder.Services.AddSingleton<IProjectsRepository, InMemoryProjectsRepository>();
+// Old: builder.Services.AddSingleton<IProjectsRepository, InMemoryProjectsRepository>();
+builder.Services.AddScoped<IProjectsRepository, EfProjectsRepository>();
 
 // === JWT Auth ===
 var issuer = builder.Configuration["Jwt:Issuer"] ?? "scherer-api";
@@ -126,7 +130,62 @@ builder.Services.AddRateLimiter(options =>
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Scherer.Api.Features.Projects.Dtos.CreateProjectRequest>();
 
+// SQLite (file) — creates Data/app.db in the app root
+var conn = builder.Configuration.GetConnectionString("Default")
+           ?? "Data Source=Data/app.db";
+
+builder.Services.AddDbContext<AppDbContext>(opt =>
+    opt.UseSqlite(conn));
+
 var app = builder.Build();
+
+// Create the DB file and (optionally) seed it on first run
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
+
+    if (!db.Projects.Any())
+    {
+        db.Projects.AddRange(
+            new ProjectEntity
+            {
+                Id = "adobe-licensing",
+                Title = "Adobe License Automation",
+                Blurb = "Automated license lifecycle to cut costs & admin toil.",
+                Year = 2025,
+                Role = "Lead Developer",
+                Link = null,
+                Repo = null,
+                TechJson = JsonSerializer.Serialize(new[] { "C#", "Azure Functions", "PowerShell" })
+            },
+            new ProjectEntity
+            {
+                Id = "server-patching",
+                Title = "Monthly Server Patching Orchestrator",
+                Blurb = "Config-driven scheduling engine with RITM/SCTASK generation, approvals, and status rollups.",
+                Year = 2025,
+                Role = "Solutions Architect",
+                Link = null,
+                Repo = null,
+                TechJson = JsonSerializer.Serialize(new[] { "ServiceNow", "Workflow", "PowerShell" })
+            },
+            new ProjectEntity
+            {
+                Id = "dfs-archive",
+                Title = "DFS Archive Request Pipeline",
+                Blurb = "MID Server + PowerShell pipeline with guarded concurrency and throttling for bulk archive jobs.",
+                Year = 2025,
+                Role = "Lead Developer",
+                Link = null,
+                Repo = null,
+                TechJson = JsonSerializer.Serialize(new[] { "MID Server", "PowerShell", "Governance" })
+            }
+        );
+        db.SaveChanges();
+    }
+}
+
 
 // in production, enforce HTTPS at the browser level
 if (!app.Environment.IsDevelopment())
