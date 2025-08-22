@@ -34,3 +34,11 @@ D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Swashbuckle.AspNetCo
 D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\Development\scherer-api\src\Scherer.Api\obj\Debug\net9.0\Scherer.Api.sourcelink.json
+D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+D:\Development\scherer-api\src\Scherer.Api\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
