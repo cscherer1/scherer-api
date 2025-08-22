@@ -69,4 +69,38 @@ public class ProjectsController(IProjectsRepository repo) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = project.Id }, project);
     }
 
+    // PUT /api/projects/{id}
+    [Authorize(Roles = "admin")]
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Project>> Update(string id, [FromBody] UpdateProjectRequest req, CancellationToken ct)
+    {
+        var existing = await repo.GetByIdAsync(id, ct);
+        if (existing is null) return NotFound();
+
+        var tech = req.Tech ?? new List<string>();
+        var updated = existing with
+        {
+            Title = req.Title,
+            Blurb = req.Blurb,
+            Tech = tech,
+            Year = req.Year,
+            Role = req.Role,
+            Link = req.Link,
+            Repo = req.Repo
+        };
+
+        var saved = await repo.UpdateAsync(id, updated, ct);
+        return Ok(saved);
+    }
+
+    // DELETE /api/projects/{id}
+    [Authorize(Roles = "admin")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id, CancellationToken ct)
+    {
+        var ok = await repo.DeleteAsync(id, ct);
+        if (!ok) return NotFound();
+        return NoContent();
+    }
+
 }

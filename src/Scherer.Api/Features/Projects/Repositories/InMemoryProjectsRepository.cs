@@ -67,4 +67,27 @@ public class InMemoryProjectsRepository : IProjectsRepository
         }
     }
 
+    public Task<Project?> UpdateAsync(string id, Project updated, CancellationToken ct = default)
+    {
+        lock (_lock)
+        {
+            var ix = _items.FindIndex(p => p.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+            if (ix < 0) return Task.FromResult<Project?>(null);
+
+            // keep the id stable
+            _items[ix] = updated with { Id = _items[ix].Id };
+            return Task.FromResult<Project?>(_items[ix]);
+        }
+    }
+
+    public Task<bool> DeleteAsync(string id, CancellationToken ct = default)
+    {
+        lock (_lock)
+        {
+            var removed = _items.RemoveAll(p => p.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+            return Task.FromResult(removed > 0);
+        }
+    }
+
+
 }
