@@ -19,22 +19,47 @@ public class AuthController(IConfiguration config) : ControllerBase
     [EnableRateLimiting("login")]
     public ActionResult<object> Login([FromBody] LoginRequest req)
     {
-        var expected = config["Admin:Password"] ?? "SetYourAdminPassword"; // set ADMIN__PASSWORD in env for real
-        if (string.IsNullOrWhiteSpace(req.Password) || req.Password != expected)
+        if (string.IsNullOrWhiteSpace(req.Password))
             return Unauthorized("Invalid credentials.");
 
-        var key = config["Jwt:Key"] ?? "dev-super-secret-change-me"; // set JWT__KEY in env for real
-        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        // Prefer hashed password if present
+        var hash = config["Admin:PasswordHash"];
+        if (!string.IsNullOrWhiteSpace(hash))
+        {
+            if (!BCrypt.Net.BCrypt.Verify(req.Password, hash))
+                return Unauthorized("Invalid credentials.");
+        }
+        else
+        {
+            // Fallback to plaintext secret ONLY if no hash configured
+            var expected = config["Admin:Password"];
+            if (string.IsNullOrWhiteSpace(expected) || req.Password != expected)
+                return Unauthorized("Invalid credentials.");
+        }
+
+        var raw = config["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key not set.");
+        byte[] keyBytes;
+        try
+        {
+            keyBytes = Convert.FromBase64String(raw);  // prefer Base64 (what we stored)
+        }
+        catch
+        {
+            keyBytes = Encoding.UTF8.GetBytes(raw);    // fallback to plain text
+        }
+
+        var signingKey = new SymmetricSecurityKey(keyBytes);
         var creds = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.Name, "admin"),
-            new Claim(ClaimTypes.Role, "admin"),
-        };
 
         var issuer = config["Jwt:Issuer"] ?? "scherer-api";
         var audience = config["Jwt:Audience"] ?? "scherer-site";
+
+        var claims = new[]
+        {
+        new Claim(ClaimTypes.Name, "admin"),
+        new Claim(ClaimTypes.Role, "admin"),
+    };
 
         var token = new JwtSecurityToken(
             issuer: issuer,
