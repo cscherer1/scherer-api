@@ -17,6 +17,7 @@ public class AuthController(IConfiguration config) : ControllerBase
     [HttpPost("login")]
     [AllowAnonymous]
     [EnableRateLimiting("login")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public ActionResult<object> Login([FromBody] LoginRequest req)
     {
         if (string.IsNullOrWhiteSpace(req.Password))

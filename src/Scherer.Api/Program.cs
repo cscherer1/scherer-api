@@ -123,6 +123,12 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
+// in production, enforce HTTPS at the browser level
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
+
 // Enable Swagger UI (always, for now, to avoid env confusion)
 app.UseSwagger();
 app.UseSwaggerUI();
