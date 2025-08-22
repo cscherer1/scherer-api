@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.RateLimiting;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using System.Threading.RateLimiting;
 
 
@@ -120,6 +122,9 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
+// FluentValidation: auto-run validators and add their errors to ModelState
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Scherer.Api.Features.Projects.Dtos.CreateProjectRequest>();
 
 var app = builder.Build();
 
