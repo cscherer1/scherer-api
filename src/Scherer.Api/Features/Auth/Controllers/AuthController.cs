@@ -17,7 +17,7 @@ public class AuthController(IConfiguration config) : ControllerBase
     [AllowAnonymous]
     public ActionResult<object> Login([FromBody] LoginRequest req)
     {
-        var expected = config["Admin:Password"] ?? "devpass"; // set ADMIN__PASSWORD in env for real
+        var expected = config["Admin:Password"] ?? "SetYourAdminPassword"; // set ADMIN__PASSWORD in env for real
         if (string.IsNullOrWhiteSpace(req.Password) || req.Password != expected)
             return Unauthorized("Invalid credentials.");
 
