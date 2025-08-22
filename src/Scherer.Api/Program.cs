@@ -134,8 +134,26 @@ builder.Services.AddValidatorsFromAssemblyContaining<Scherer.Api.Features.Projec
 var conn = builder.Configuration.GetConnectionString("Default")
            ?? "Data Source=Data/app.db";
 
+var provider = builder.Configuration["Database:Provider"] ?? "Sqlite";
+
+// Connection strings
+var sqliteConn = builder.Configuration.GetConnectionString("Sqlite")
+                 ?? "Data Source=Data/app.db";
+var pgConn = builder.Configuration.GetConnectionString("Postgres"); // set in prod
+
 builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlite(conn));
+{
+    if (string.Equals(provider, "Postgres", StringComparison.OrdinalIgnoreCase))
+    {
+        if (string.IsNullOrWhiteSpace(pgConn))
+            throw new InvalidOperationException("ConnectionStrings:Postgres is not set.");
+        opt.UseNpgsql(pgConn);
+    }
+    else
+    {
+        opt.UseSqlite(sqliteConn);
+    }
+});
 
 var app = builder.Build();
 
