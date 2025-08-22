@@ -27,7 +27,7 @@ builder.Services.AddSingleton<IProjectsRepository, InMemoryProjectsRepository>()
 
 // === JWT Auth ===
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "dev-super-secret-change-me"; //TODO: set env in prod
-var sginingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -38,7 +38,7 @@ builder.Services
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = sginingKey,
+            IssuerSigningKey = signingKey,
             ClockSkew = TimeSpan.FromSeconds(2)
         };
     });
