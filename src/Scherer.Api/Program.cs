@@ -1,4 +1,7 @@
 using Scherer.Api.Features.Projects.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +24,26 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IProjectsRepository, InMemoryProjectsRepository>();
+
+// === JWT Auth ===
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "dev-super-secret-change-me"; //TODO: set env in prod
+var sginingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = sginingKey,
+            ClockSkew = TimeSpan.FromSeconds(2)
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
