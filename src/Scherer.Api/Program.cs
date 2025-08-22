@@ -3,6 +3,32 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+
+
+static SymmetricSecurityKey BuildSigningKey(IConfiguration config)
+{
+    var raw = config["Jwt:Key"] ?? throw new InvalidOperationException(
+        "Jwt:Key is missing. Set it via user-secrets (Development) or env var (Production).");
+
+    // Accept either base64 or plain text; prefer base64 for long random keys
+    byte[] keyBytes;
+    try
+    {
+        keyBytes = Convert.FromBase64String(raw);
+    }
+    catch
+    {
+        keyBytes = Encoding.UTF8.GetBytes(raw);
+    }
+
+    if (keyBytes.Length < 32) // 256 bits minimum for HS256
+        throw new InvalidOperationException(
+            $"Jwt:Key too short ({keyBytes.Length} bytes). It must be at least 32 bytes.");
+
+    return new SymmetricSecurityKey(keyBytes);
+}
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,12 +69,27 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
-builder.Services.AddHealthChecks();
+
+builder.Services.AddHealthChecks()
+    .AddCheck("jwt-key", () =>
+    {
+        try
+        {
+            var _ = BuildSigningKey(builder.Configuration);
+            return Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Unhealthy(ex.Message);
+        }
+    });
+
 builder.Services.AddSingleton<IProjectsRepository, InMemoryProjectsRepository>();
 
 // === JWT Auth ===
-var jwtKey = builder.Configuration["Jwt:Key"] ?? "dev-super-secret-change-me"; //TODO: set env in prod
-var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+var issuer = builder.Configuration["Jwt:Issuer"] ?? "scherer-api";
+var audience = builder.Configuration["Jwt:Audience"] ?? "scherer-site";
+var signingKey = BuildSigningKey(builder.Configuration); // from earlier fail-fast helper
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -56,15 +97,29 @@ builder.Services
     {
         options.TokenValidationParameters = new()
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
             IssuerSigningKey = signingKey,
-            ClockSkew = TimeSpan.FromSeconds(2)
+            ClockSkew = TimeSpan.FromMinutes(2)
         };
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("login", o =>
+    {
+        o.PermitLimit = 5;                 // 5 attempts
+        o.Window = TimeSpan.FromMinutes(1); // per minute
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 2;
+    });
+});
+
 
 var app = builder.Build();
 
@@ -79,6 +134,8 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 app.MapControllers();
 app.MapHealthChecks("/health");

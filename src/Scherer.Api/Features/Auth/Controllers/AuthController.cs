@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using Scherer.Api.Features.Auth.Dtos;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Scherer.Api.Features.Auth.Controllers;
 
@@ -15,6 +16,7 @@ public class AuthController(IConfiguration config) : ControllerBase
     // POST /api/auth/login
     [HttpPost("login")]
     [AllowAnonymous]
+    [EnableRateLimiting("login")]
     public ActionResult<object> Login([FromBody] LoginRequest req)
     {
         var expected = config["Admin:Password"] ?? "SetYourAdminPassword"; // set ADMIN__PASSWORD in env for real
@@ -31,10 +33,15 @@ public class AuthController(IConfiguration config) : ControllerBase
             new Claim(ClaimTypes.Role, "admin"),
         };
 
+        var issuer = config["Jwt:Issuer"] ?? "scherer-api";
+        var audience = config["Jwt:Audience"] ?? "scherer-site";
+
         var token = new JwtSecurityToken(
+            issuer: issuer,
+            audience: audience,
             claims: claims,
             notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddHours(8),
+            expires: DateTime.UtcNow.AddMinutes(60),
             signingCredentials: creds
         );
 
