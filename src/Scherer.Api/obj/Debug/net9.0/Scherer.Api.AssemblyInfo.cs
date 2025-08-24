@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Scherer.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd8c99f84126ba3d6dcffaaa1da8171471e3df1a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ffca7376d9f54c370280e113cb08160025533be0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Scherer.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Scherer.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

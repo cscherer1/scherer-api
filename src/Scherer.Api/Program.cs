@@ -122,7 +122,7 @@ builder.Services.AddRateLimiter(options =>
         o.PermitLimit = 5;                 // 5 attempts
         o.Window = TimeSpan.FromMinutes(1); // per minute
         o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        o.QueueLimit = 2;
+        o.QueueLimit = 0;
     });
 });
 
@@ -171,6 +171,15 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
 }
+
+app.Use(async (ctx, next) =>
+{
+    if (ctx.Request.Path.StartsWithSegments("/swagger"))
+        ctx.Response.Headers["X-Robots-Tag"] = "noindex, nofollow";
+    await next();
+});
+// Optional: also serve robots.txt from the API host
+app.MapGet("/robots.txt", () => Results.Text("User-agent: *\nDisallow: /swagger/\n", "text/plain"));
 
 // Enable Swagger UI (always, for now, to avoid env confusion)
 app.UseSwagger();
