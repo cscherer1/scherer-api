@@ -1,144 +1,118 @@
-SCHERER API
+# scherer-api
 
-DESCRIPTION
-ASP.NET Core 9 Web API for christianscherer.dev. Provides JWT authentication, CRUD for Projects, FluentValidation, EF Core (SQLite for development, PostgreSQL for production), Swagger UI, and a health endpoint.
+REST API backend for [christianscherer.dev](https://christianscherer.dev) — a production-deployed ASP.NET Core application that powers the portfolio site's project catalog and admin experience.
 
-FEATURES
-Projects CRUD (list, create, update, delete).
-JWT auth (HS256) for a single admin user with short-lived tokens.
-Server-side validation using FluentValidation.
-Entity Framework Core with SQLite in development and PostgreSQL (Neon) in production.
-CORS configured for the site.
-Swagger UI at /swagger and health at /health.
-Docker image for production.
+**Stack:** ASP.NET Core 9 · C# · EF Core · JWT · FluentValidation · PostgreSQL / SQLite · Docker · Render
 
-TECH
-ASP.NET Core 9 and C#.
-EF Core with SQLite and Npgsql providers.
-FluentValidation.
-Swashbuckle for Swagger.
+---
 
-DOMAIN MODEL (PROJECT)
-Example JSON:
-{"id":"string","title":"string","blurb":"string","tech":["C#","React"],"year":2024,"role":"Solutions Architect","link":"https://example.com","repo":"https://github.com/..."}
+## Why this project exists
 
-Notes: id is a slug. link and repo are optional. tech is a list of strings.
+A portfolio is only as credible as the systems behind it. Rather than a static list of projects, this API provides a real content pipeline: an authenticated admin can create, update, and delete projects through a hidden admin panel on the site, and visitors read them through a clean REST API. It demonstrates a complete vertical slice — auth, validation, persistence, API design, and production deployment — end to end.
 
-AUTHENTICATION
-POST /api/auth/login with body {"password":"yourAdminPassword"} returns {"token":"jwt"}.
-Include tokens on protected endpoints using header:
-Authorization: Bearer yourJwtHere
-Admin password is stored as a BCrypt hash. The JWT key is a 64-byte random secret (Base64) used to sign tokens. Do not place secrets in JWT claims. Always use HTTPS.
+## Key decisions (and why)
 
-ENDPOINTS
-GET /health
-GET /api/projects
-GET /api/projects/{id}
-POST /api/projects
-PUT /api/projects/{id}
-DELETE /api/projects/{id}
-POST /api/auth/login
+| Decision | Choice | Reasoning |
+|---|---|---|
+| Auth | JWT (HS256), short-lived tokens | Stateless, no server session storage; the site keeps the token **in memory only**, so it survives nothing and can't be stolen from localStorage. |
+| Password storage | BCrypt hash | Industry standard for credential hashing; the raw password never exists at rest. |
+| Validation | FluentValidation | Server-side validation with clean separation from controllers; the SPA renders the same messages inline. |
+| Database | EF Core, SQLite in dev / PostgreSQL (Neon) in prod | Same codebase, zero provider lock-in; production migrations run on boot. |
+| Secrets | User Secrets (dev) / environment variables (prod) | Nothing credential-shaped is ever committed. |
+| API shape | REST + Swagger UI | Self-documenting; every endpoint is exercisable from the browser. |
+| Packaging | Docker image, deployed on Render | One artifact, same behavior locally and in production. |
 
-QUICK CALLS (POWERSHELL)
-Login:
-curl -sX POST https://localhost:7210/api/auth/login
- -H "Content-Type: application/json" -d "{"password":"yourAdminPassword"}"
+## Features
 
-Create:
-curl -sX POST https://localhost:7210/api/projects
- -H "Authorization: Bearer yourJwtHere" -H "Content-Type: application/json" -d "{"title":"Portfolio API","blurb":"ASP.NET Core + EF Core + JWT","tech":["C#",".NET","EF Core"],"year":2025,"role":"Developer","link":"https://christianscherer.dev\"}
-"
+- **Projects CRUD** — list, get by slug, create, update, delete
+- **JWT authentication** — single admin user, short-lived HS256 tokens
+- **BCrypt-hashed credentials** — never stored or transmitted in plaintext
+- **FluentValidation** — first-party validation rules on every write path
+- **Rate limiting on login** — brute-force resistance on the one public surface
+- **Swagger UI** at `/swagger`, **health check** at `/health`
+- **CORS** locked to the known site origins
+- **Automatic migrations** on startup in all environments
+- **OpenAPI** generated via Swashbuckle
 
-(If you are on bash, replace the backslash-escaped quotes accordingly.)
+## API reference
 
-LOCAL DEVELOPMENT (SQLITE)
-Requirement: .NET 9 SDK installed.
-Change directory to the API:
-cd .\src\Scherer.Api
-Set development secrets (User Secrets):
-dotnet user-secrets set "Admin:PasswordHash" "yourBCryptHash"
-dotnet user-secrets set "Jwt:Key" "yourBase64Key"
-Optional:
-dotnet user-secrets set "Jwt:Issuer" "scherer-api"
-dotnet user-secrets set "Jwt:Audience" "scherer-site"
-Run the API with HTTPS:
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| GET | `/health` | — | Liveness check |
+| GET | `/api/projects` | — | List all projects |
+| GET | `/api/projects/{slug}` | — | Get one project |
+| POST | `/api/projects` | Bearer | Create a project |
+| PUT | `/api/projects/{slug}` | Bearer | Update a project |
+| DELETE | `/api/projects/{slug}` | Bearer | Delete a project |
+| POST | `/api/auth/login` | — | Exchange admin password for a JWT (rate-limited) |
+
+Project model:
+
+```json
+{
+  "id": "ouroborn-llm-council",
+  "title": "Ouroborn",
+  "blurb": "Multi-agent LLM council...",
+  "tech": ["Python", "Ollama", "SQLite"],
+  "year": 2026,
+  "role": "Solutions Architect",
+  "link": "https://example.com",
+  "repo": "https://github.com/... (optional)"
+}
+```
+
+## Getting started
+
+**Requires:** .NET 9 SDK.
+
+```bash
+cd src/Scherer.Api
+
+# configure secrets (dev only)
+dotnet user-secrets set "Admin:PasswordHash" "<bcrypt hash>"
+dotnet user-secrets set "Jwt:Key" "<64-byte base64>"
+
+# run with HTTPS + Swagger at https://localhost:7210/swagger
 dotnet run --launch-profile https
-Swagger UI at https://localhost:7210/swagger
+```
 
-Health at https://localhost:7210/health
+`db.Database.Migrate()` applies the schema on startup in every environment, so `dotnet run` is all you need.
 
-Development seed data is added only in Development. SQLite file path: Data\app.db.
+### Generate a JWT signing key
 
-JWT KEY GENERATOR (POWERSHELL)
+```powershell
 $bytes = New-Object byte[] 64
-$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-$rng.GetBytes($bytes)
+[System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
 [Convert]::ToBase64String($bytes)
+```
 
-DATABASE AND MIGRATIONS
-The app runs db.Database.Migrate() on startup.
+## Configuration
 
-SQLite development migrations:
-dotnet ef migrations add DevChange -o Data/Migrations
-dotnet ef database update
+| Key | Purpose |
+|---|---|
+| `Database__Provider` | `Sqlite` (dev) or `Postgres` (prod) |
+| `ConnectionStrings__Sqlite` | Dev database path |
+| `ConnectionStrings__Postgres` | Production connection string (SSL required) |
+| `Admin__PasswordHash` | BCrypt hash of the admin password |
+| `Jwt__Key` | 64-byte Base64 HS256 signing key |
+| `Jwt__Issuer` / `Jwt__Audience` | Token claims |
 
-PostgreSQL production migrations (scaffold against Postgres):
-Set temporary environment variables in the current shell:
-$env:Database__Provider = "Postgres"
-$env:ConnectionStrings__Postgres = "Host=HOST;Database=DB;Username=USER;Password=PASS;SSL Mode=Require;Trust Server Certificate=true;Pooling=true;"
-Create a migration and optionally apply it:
-dotnet ef migrations add InitialPg -o Data/Migrations
-dotnet ef database update
-Remove temp env vars:
-Remove-Item Env:Database__Provider, Env:ConnectionStrings__Postgres -ErrorAction SilentlyContinue
+## Deployment
 
-CORS
-Allowed origins by default:
-http://localhost:5173
+Production runs on **Render** as a Docker web service against **Neon Postgres**:
 
-https://christianscherer.dev
+1. `docker build -t scherer-api .`
+2. Set the environment variables above
+3. Render builds the image and runs migrations on boot
 
-To add more, edit the CORS policy in Program.cs and redeploy.
+## Security notes
 
-CONFIGURATION
-Values may come from appsettings files, User Secrets (development), or environment variables (production). Environment variables use double underscores.
-ASPNETCORE_ENVIRONMENT: Development or Production
-Database:Provider: Sqlite or Postgres
-ConnectionStrings:Sqlite: Data Source=Data/app.db
-ConnectionStrings:Postgres: Host=HOST;Database=DB;Username=USER;Password=PASS;SSL Mode=Require;Trust Server Certificate=true;Pooling=true;
-Admin:PasswordHash: the BCrypt hash of the admin password
-Jwt:Key: a Base64 64-byte secret for HS256
-Jwt:Issuer: scherer-api
-Jwt:Audience: scherer-site
+- Secrets live only in User Secrets (dev) / env vars (prod) — never in the repo
+- Rotating `Jwt__Key` invalidates all outstanding tokens instantly
+- JWTs are signed, not encrypted — no secrets in claims
+- CORS is restricted to the actual site origins
+- Login rate-limited; password BCrypt-hashed
 
-DOCKER (PRODUCTION IMAGE)
-Build:
-docker build -t scherer-api .
-Run (example):
-docker run -p 8080:8080 --env-file .env scherer-api
-The container listens on port 8080 (ASPNETCORE_URLS set to http://0.0.0.0:8080
-).
+## License
 
-DEPLOY (RENDER AND NEON)
-Create a Neon Postgres database and use the direct (non-pooler) host.
-Create a Render Web Service (Docker) pointing at this repo. Set these environment variables:
-ASPNETCORE_ENVIRONMENT=Production
-Database__Provider=Postgres
-ConnectionStrings__Postgres=Host=HOST;Database=DB;Username=USER;Password=PASS;SSL Mode=Require;Trust Server Certificate=true;Pooling=true;
-Jwt__Key=yourBase64Key
-Jwt__Issuer=scherer-api
-Jwt__Audience=scherer-site
-Admin__PasswordHash=yourBCryptHash
-Render will build the image and run migrations on boot. Point the website to the API with Vercel env var: VITE_API_URL=https://your-service.onrender.com
-
-SECURITY NOTES
-Do not commit secrets. Use User Secrets in development and environment variables in production. Rotate the JWT key to invalidate all tokens. JWTs are signed, not encrypted. Do not include secrets in JWT claims. Always use HTTPS.
-
-TROUBLESHOOTING
-PendingModelChangesWarning on startup: you changed the model without adding a migration. Create and apply a migration and commit it.
-401 or 403 in Swagger: paste only the raw token (no Bearer prefix) into the Authorize modal. Swagger adds Bearer for you.
-CORS errors: add your origin to the CORS policy and redeploy.
-Neon connection errors: use the direct host (no -pooler) and include SSL Mode=Require;Trust Server Certificate=true.
-
-LICENSE
 Private portfolio project. © Christian Scherer.
