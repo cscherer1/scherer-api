@@ -22,9 +22,9 @@ namespace Scherer.Api.Data.Migrations
         {
             new("enterprise-integration-automation",
                 "Enterprise Integration & Automation",
-                "Led the QTS platform's Azure modernization and built the integration layer around it: OAuth and Azure-token REST APIs, ServiceNow catalog automation for thousands of users, and scheduled workflows for licensing, DFS archiving and data normalization. The automation removed hundreds of administrative hours a year and replaced hand-run processes with documented, supported services.",
-                2025, "Integration & Automation Architect · Burns & McDonnell", null,
-                new[] { "Azure", "ServiceNow", "REST / OAuth", ".NET", "PowerShell", "IBM i", "Data governance" }),
+                "Automate enterprise and M365 processes through ServiceNow, Azure and PowerShell: access and licensing changes, IP-address management, backup and restore, and supporting data workflows. Examples include EfficientIP pool reservations, Revit server and ImaginIT Clarity automation, delegated manager access to departed employees' files, and ArcGIS backup and restore in Azure. The work removed hundreds of administrative hours a year and replaced hand-run processes with documented, supported services.",
+                2025, "Staff Software Developer · Burns & McDonnell", null,
+                new[] { "Azure", "ServiceNow", "PowerShell", "Microsoft 365", "EfficientIP", "ArcGIS", "REST / OAuth" }),
             new("ibmi-azure-integration-bridge",
                 "IBM i ↔ Azure Integration Bridge",
                 "Design and maintain the bridge between IBM i (RPGLE/CL) business systems and Azure-hosted Python and .NET services. Work with stakeholders to define interfaces, replace manual workflows with supported automation, and keep production integrations observable and recoverable.",
