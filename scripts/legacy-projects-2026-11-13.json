@@ -1,0 +1,496 @@
+{
+  "heading": "Projects",
+  "items": [
+    {
+      "id": "op-e-console-encrypted-ai-operations-console",
+      "title": "OP-E Console \u2014 Encrypted AI Operations Console",
+      "blurb": "End-to-end encrypted chat console for operating an OpenCode/DeepSeek agent: session resume, screenshot attachments, all-session cost analytics, live health, and an isolated workspace. Adds the Mind observer feed with episodic memory, a read-only Sentinel observer (anomaly triage and advisory alerts), a local FTS5 recall index, a four-lab model council with verification and a judge, a supervised remote-desktop gateway, and a live architecture view. Runs behind Cloudflare Access with Kuma monitoring and verified backups.",
+      "tech": [
+        "Python",
+        "AES-GCM",
+        "WebCrypto",
+        "OpenCode",
+        "DeepSeek",
+        "Docker",
+        "SQLite",
+        "FTS5",
+        "Sentinel",
+        "Model council",
+        "RDP gateway",
+        "Cloudflare Access"
+      ],
+      "year": 2026,
+      "role": "AI Systems Engineer \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "local-llm-ai-agent-orchestration-stack",
+      "title": "Local LLM & AI Agent Orchestration Stack",
+      "blurb": "Runs local open-weight LLMs via Ollama for privacy-preserving AI inference. Integrates agent frameworks with local file systems, bash runtimes, and system APIs. Implements contextual prompt chaining and structured tool-calling pipelines connecting model outputs to operational OS commands.",
+      "tech": [
+        "Ollama",
+        "Python",
+        "Docker",
+        "Linux",
+        "LLM"
+      ],
+      "year": 2026,
+      "role": "AI Systems Engineer",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "routellm-cli-in-the-development-pipeline",
+      "title": "RouteLLM CLI in the Development Pipeline",
+      "blurb": "Integrated the RouteLLM CLI \u2014 an OpenAI-compatible LLM routing gateway \u2014 into the development pipeline, giving every agentic and automation workflow a single unified endpoint that routes each request to the best model for the job.",
+      "tech": [
+        "RouteLLM",
+        "LLM",
+        "OpenAI-compatible API",
+        "CLI",
+        "Python",
+        "Automation"
+      ],
+      "year": 2026,
+      "role": "Systems & AI Engineer \u00b7 Personal",
+      "link": "https://routellm.abacus.ai",
+      "repo": null
+    },
+    {
+      "id": "job-search-automation-dashboard",
+      "title": "JobDashboard \u2014 Self-Hosted Career Automation Stack",
+      "blurb": "Automated job-search pipeline that scrapes live postings daily (JobSpy), builds a verified skill inventory with evidence, and uses LLM-powered evaluation to score fit against real, provable experience before generating tailored resume PDFs and cover letters. Orchestrated with n8n on Docker, data in NocoDB, dashboard in Python/FastAPI. Architected around the Cloudflare 524 edge-timeout lesson: heavy work runs as background jobs that report progress instead of one long-lived request.",
+      "tech": [
+        "n8n",
+        "NocoDB",
+        "JobSpy",
+        "Python",
+        "LLM",
+        "Docker",
+        "FastAPI"
+      ],
+      "year": 2026,
+      "role": "Systems & AI Engineer \u00b7 Personal",
+      "link": "/projects/jobdashboard",
+      "repo": null
+    },
+    {
+      "id": "ouroborn-local-llm-council",
+      "title": "Ouroborn \u2014 Local LLM Deliberation Council",
+      "blurb": "An original multi-agent system where a panel of local language models answers independently, argues over blind-labeled rounds, and a separate foreman model reads the verdict. Runs entirely on owned hardware via Ollama \u2014 no API calls, nothing leaves the machine. Opposite of an API wrapper.",
+      "tech": [
+        "Python",
+        "Ollama",
+        "LLM",
+        "Docker",
+        "SQLite",
+        "FastAPI"
+      ],
+      "year": 2026,
+      "role": "Systems & AI Engineer \u00b7 Personal",
+      "link": "/projects/ouroborn",
+      "repo": null
+    },
+    {
+      "id": "secure-term-end-to-end-encrypted-browser-terminal",
+      "title": "Secure-Term \u2014 End-to-End Encrypted Browser Terminal",
+      "blurb": "E2E-encrypted long-poll browser terminal that keeps terminal content opaque to edge and TLS-inspection proxies. Python standard-library HTTP server, AES-GCM via WebCrypto, paramiko SSH into persistent tmux sessions, constant-time token auth, no inbound ports. Built so remote administration works through a Zero Trust tunnel without exposing plaintext to the middlebox.",
+      "tech": [
+        "Python",
+        "AES-GCM",
+        "WebCrypto",
+        "xterm.js",
+        "paramiko",
+        "SSH",
+        "tmux",
+        "Docker"
+      ],
+      "year": 2026,
+      "role": "Security & Systems Engineer \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "agent-test-disposable-container-verification-pipeline",
+      "title": "Agent-Test \u2014 Disposable-Container Verification Pipeline",
+      "blurb": "Self-contained CI harness that spins ephemeral containers to run static analysis, unit/API/UI tests, and hardcoded-value scans against the career automation stack without touching live services. Treats undefined-name lint errors as build failures and gates merges on reproducible results.",
+      "tech": [
+        "Docker",
+        "pytest",
+        "pyflakes",
+        "Browserless",
+        "Bash",
+        "CI/CD",
+        "GitHub Actions"
+      ],
+      "year": 2026,
+      "role": "DevOps / Test Engineer \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "ai-study-guide-interview-prep-jobdashboard",
+      "title": "AI Study Guide & Interview Prep (JobDashboard)",
+      "blurb": "JobDashboard extension that researches each target company (Wikipedia, news RSS, site scrape, tech-stack detection) and generates a per-job study guide and interview prep sheet grounded only in verified skills and project evidence. Runs as an n8n workflow over the same LLM routing layer.",
+      "tech": [
+        "n8n",
+        "LLM",
+        "RouteLLM",
+        "NocoDB",
+        "Python",
+        "RSS",
+        "Web Scraping"
+      ],
+      "year": 2026,
+      "role": "AI Systems Engineer \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "agentic-cli-development-workflow-opencode-deepseek",
+      "title": "Agentic CLI Development Workflow (OpenCode + DeepSeek)",
+      "blurb": "Long-context agent-driven development using OpenCode with DeepSeek models for code execution, wired into the same verification gates as human changes: disposable-container tests, hardcode scans, and PR review. Emphasis on invariant design and proof of correctness rather than blind generation.",
+      "tech": [
+        "OpenCode",
+        "DeepSeek",
+        "LLM",
+        "Git",
+        "Docker",
+        "CLI",
+        "CI/CD"
+      ],
+      "year": 2026,
+      "role": "AI Systems Engineer \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "op-e-voice-local-speech-service",
+      "title": "OP-E Voice \u2014 Local Speech Service",
+      "blurb": "Self-hosted speech service for my agent's spoken interface: faster-whisper transcription and Kokoro, Piper, or eSpeak synthesis with per-emotion prosody, signature chirps, and callout framing. Streaming audio runs over an encrypted session with no cloud speech APIs involved.",
+      "tech": [
+        "Python",
+        "faster-whisper",
+        "Kokoro",
+        "Piper",
+        "eSpeak NG",
+        "FastAPI",
+        "Docker",
+        "Audio DSP"
+      ],
+      "year": 2026,
+      "role": "AI Systems Engineer \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "command-deck-container-control-plane",
+      "title": "Command Deck \u2014 Container Control Plane & Tool Console",
+      "blurb": "Config-driven control plane and 43-tool operations console for a 43-container self-hosted stack: discovers Docker services live, groups tools by function, streams host and per-container stats, runs HTTP health probes, and starts/stops/restarts through a guarded action layer. FastAPI and the Docker SDK behind a restricted socket proxy, Cloudflare Access JWT verification, YAML/env config, and a dependency-free SPA.",
+      "tech": [
+        "FastAPI",
+        "Docker SDK",
+        "Cloudflare Access",
+        "PyJWT",
+        "psutil",
+        "Python",
+        "YAML",
+        "Health checks"
+      ],
+      "year": 2026,
+      "role": "Platform / DevOps Engineer \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "command-center-disaster-recovery-rebuild-repo",
+      "title": "Command Center \u2014 Disaster-Recovery Rebuild Repo",
+      "blurb": "Sanitized disaster-recovery repository for a multi-service home server: every maintained service pinned as a submodule, secrets kept out of source, and a bootstrap that detects the host (distro, UID/GID, storage, ports) and rebuilds the stack from scratch. Includes backup/restore tooling, sanitization checks, and written rebuild runbooks.",
+      "tech": [
+        "Docker Compose",
+        "Bash",
+        "Python",
+        "Git Submodules",
+        "Linux",
+        "Cloudflare Zero Trust",
+        "Disaster Recovery"
+      ],
+      "year": 2026,
+      "role": "Systems Architect \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "zero-trust-homelab-infrastructure",
+      "title": "Zero Trust Homelab Infrastructure",
+      "blurb": "Designed and operates a 20+ service containerized homelab on Ubuntu Linux, exposed exclusively through Cloudflare Zero Trust tunnels with no open inbound ports. Stack includes AdGuard Home for split-horizon DNS, Cockpit for web-based system management, Portainer for container orchestration, and automated ClamAV scanning pipelines.",
+      "tech": [
+        "Docker",
+        "Linux",
+        "Cloudflare Zero Trust",
+        "AdGuard Home"
+      ],
+      "year": 2026,
+      "role": "Systems Engineer / Architect",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "ibm-i-azure-integration-bridge",
+      "title": "IBM i \u2194 Azure Integration Bridge",
+      "blurb": "Architects and maintains integration bridges connecting IBM i (AS/400) business logic written in RPG/CL to modern cloud services including Azure, Python REST APIs, and .NET endpoints. Eliminates the legacy/modern divide for enterprise ERP data flows.",
+      "tech": [
+        "IBM i",
+        "RPG",
+        "CL",
+        "Azure",
+        "Python",
+        ".NET"
+      ],
+      "year": 2026,
+      "role": "Programmer/Analyst / Integration Engineer",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "self-healing-stack-automation",
+      "title": "Self-Healing Stack Automation",
+      "blurb": "Cron-driven operations layer for a 43-container stack: Brave CPU watchdog, container health watchdog, Sonarr queue janitor, qBittorrent executable exclusions, Uptime Kuma-to-ntfy alert bridge, and nightly consistent SQLite/Postgres backups mirrored across drives. Every fix runs unattended with cooldowns and dry-run support.",
+      "tech": [
+        "Python",
+        "Bash",
+        "Docker",
+        "Uptime Kuma",
+        "ntfy",
+        "SQLite",
+        "PostgreSQL",
+        "Cron"
+      ],
+      "year": 2026,
+      "role": "Site Reliability / Platform Engineer \u00b7 Personal",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "m365-tenant-automation-governance",
+      "title": "M365 Tenant Automation & Governance",
+      "blurb": "Engineered enterprise-scale PowerShell automation at Burns & McDonnell operating one tier below Global Administrator. Covered user/identity lifecycle provisioning, Intune MDM/MAM policy enforcement, Entra ID RBAC drift correction, Exchange Online mailbox administration, and OneDrive for Business compliance.",
+      "tech": [
+        "PowerShell",
+        "M365",
+        "Intune",
+        "Entra ID",
+        "Exchange Online",
+        "Azure AD"
+      ],
+      "year": 2025,
+      "role": "M365 Sub-Global Administrator / Automation Engineer",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "quality-tracking-system-qts",
+      "title": "Quality Tracking System (QTS)",
+      "blurb": "QTS is a C#, .NET, SQL Application which was developed for engineers at BMcD to track, maintain and review deliverables before their final delivery to clients.",
+      "tech": [
+        ".NET",
+        "SQL",
+        "C#"
+      ],
+      "year": 2025,
+      "role": "Developer",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "monthly-server-patch-scheduler",
+      "title": "Monthly Server Patch Scheduler",
+      "blurb": "Built a configurable scheduling engine inside ServiceNow to automate monthly server patching process. Logic supported both fixed week/weekday patterns and relative event chaining (e.g., \u201cafter Test Patch 1 by 1 week\u201d). Integrated with RITM/SCTASK creation, automatic assignment groups, and dynamic closure of REQs upon final task completion. Significantly reduced operations workload and improved compliance tracking.",
+      "tech": [
+        "ServiceNow",
+        "JavaScript (ES12)",
+        "Workflow Automation"
+      ],
+      "year": 2025,
+      "role": "Lead Developer / Solutions Architect",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "dfs-archive-request-automation",
+      "title": "DFS Archive Request Automation",
+      "blurb": "Designed and implemented a MID Server PowerShell integration to streamline archiving of engineering project files. Features included dynamic credential handling, project qualification logic, Robocopy execution, and request throttling for concurrent task limits. Improved performance, reduced manual intervention, and ensured compliance with archival policies.",
+      "tech": [
+        "ServiceNow",
+        "PowerShell",
+        "MID Server",
+        "Robocopy"
+      ],
+      "year": 2025,
+      "role": "Lead Developer / Solutions Architect",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "adobe-user-management-and-licensing",
+      "title": "Adobe User Management and Licensing",
+      "blurb": "Developed a comprehensive ServiceNow Script Include (BMcDAdobeUM) to fully automate Adobe license management. Features included daily synchronization of product profiles, dynamic escalation logic from single apps to All Apps, automatic Custom Fonts inclusion, and exclusion handling for utility licenses. Eliminated manual processes and reduced licensing errors across thousands of users.",
+      "tech": [
+        "ServiceNow",
+        "JavaScript (ES12)",
+        "REST API",
+        "Adobe User Management API"
+      ],
+      "year": 2025,
+      "role": "Lead Developer / Integration Engineer",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "active-directory-data-pipeline-automation",
+      "title": "Active Directory Data Pipeline Automation",
+      "blurb": "Built and debugged an SSIS data pipeline that merged multi-domain Active Directory exports (BMCD, EXT, IN) into unified CSVs. Implemented filtering for invalid records (e.g., krbtgt_8183), enforced UTF-8 with CRLF formatting, and optimized batch script execution. Reduced manual cleanup, improved reliability, and provided a scalable foundation for downstream reporting.",
+      "tech": [
+        "SSIS",
+        "SQL Server",
+        "CSV",
+        "Active Directory",
+        "Batch Scripting"
+      ],
+      "year": 2025,
+      "role": "Developer / Data Engineer",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "personal-portfolio-website",
+      "title": "Personal Portfolio Website",
+      "blurb": "Built a modern portfolio website to showcase professional projects and experience. Designed with Next.js and React for a responsive, component-driven UI with a clean dark-mode aesthetic. Features project cards, interactive navigation, and a scalable structure for future expansions.",
+      "tech": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "CSS"
+      ],
+      "year": 2025,
+      "role": "Full-Stack Developer",
+      "link": "https://christianscherer.dev/",
+      "repo": "https://github.com/cscherer1/scherer-site"
+    },
+    {
+      "id": "resource-management",
+      "title": "Resource Management",
+      "blurb": "Resource Management was a tool used to track available people resources for various projects. It was a tool tied into our ERP, MIS, Timecard and various other systems. The system was a C#, .NET, SQL application which managed data via custom integrations and MuleSoft.",
+      "tech": [
+        ".NET",
+        "SQL",
+        "C#",
+        "MuleSoft",
+        "API"
+      ],
+      "year": 2025,
+      "role": "Developer",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "project-management-api-database",
+      "title": "Portfolio Project Management API & Database",
+      "blurb": "Developed a custom ASP.NET API with PostgreSQL backend to power the Projects section of the portfolio website. Supports dynamic project creation, updates, and retrieval through structured endpoints. Provides separation of content from the front end, enabling clean data management, version control, and long-term scalability.",
+      "tech": [
+        "ASP.NET",
+        "PostgreSQL",
+        "REST API",
+        "C#"
+      ],
+      "year": 2025,
+      "role": "Backend Developer / Solutions Architect",
+      "link": "https://scherer-api.onrender.com/swagger",
+      "repo": "https://github.com/cscherer1/scherer-api"
+    },
+    {
+      "id": "track-folio-com",
+      "title": "Track-folio.com",
+      "blurb": "Track-folio.com is a project to solve the problem with maintaining and tracking job application status'.\n\nThe stack is Angular 18 front-end styled with Bootstrap and CSS3, backed by a Spring Boot 3 API with Thymeleaf templates, secured with Spring Security (JWT/form login), using JPA/Hibernate with a Postgres database, all containerized with Docker and deployed to various cloud hosts.\n\nThe project is currently in development and will be available for anyone to use.",
+      "tech": [
+        "Angular",
+        "Bootstrap",
+        "CSS3",
+        "HTML",
+        "Typescript",
+        "Java",
+        "Spring Boot",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "year": 2025,
+      "role": "Full-stack Developer",
+      "link": "https://track-folio.com",
+      "repo": "https://github.com/cscherer1/trackfolio"
+    },
+    {
+      "id": "servicenow-enterprise-workflow-platform",
+      "title": "ServiceNow Enterprise Workflow Platform",
+      "blurb": "Built end-to-end workflow automations at Burns & McDonnell including Business Rules, UI Actions, Script Includes, and custom Service Catalog integrations via REST APIs. Reduced manual IT process overhead across cross-departmental service delivery.",
+      "tech": [
+        "ServiceNow",
+        "JavaScript",
+        "REST APIs"
+      ],
+      "year": 2025,
+      "role": "Lead Developer / Solutions Architect",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "name-change-automation",
+      "title": "Name Change Automation",
+      "blurb": "An automation solution developed to greatly reduce the manual work needed for name changes within BMcD. This was a custom solution utilizing Javascript and PowerShell, interacting with Active Directory, Entra Active Directory and ServiceNow. This solution saved on average ~400 hours a year and enabled the full tracking and auditing of name changes.",
+      "tech": [
+        "Javascript",
+        "ServiceNow",
+        "PowerShell",
+        "Active Directory",
+        "Entra Active Directory",
+        "Automation"
+      ],
+      "year": 2024,
+      "role": "Lead Developer / Solutions Architect",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "autodesk-suite-automation-support",
+      "title": "Autodesk Suite Automation & Support",
+      "blurb": "Owned and automated company-wide Autodesk Suite operations, including Revit Server project setup, ImaginIT Clarity monitoring, and engineering software deployments. Developed scripts and workflows that reduced setup times, improved stability, and minimized manual support interventions for thousands of engineers across the organization.",
+      "tech": [
+        "Autodesk",
+        "Revit Server",
+        "Clarity",
+        "PowerShell",
+        "Python",
+        "Clarity API",
+        "Workflow Automation"
+      ],
+      "year": 2022,
+      "role": "Application Owner / Automation Developer",
+      "link": null,
+      "repo": null
+    },
+    {
+      "id": "resq-support-automation",
+      "title": "RESQ Support Automation",
+      "blurb": "While acting as the sole member of the Tier 1.5 RESQ team, created automation workflows to streamline intern onboarding, conference room setups, and recurring IT requests. Reduced turnaround times from hours to minutes and eliminated repetitive manual tasks, earning a rare perfect 5.0 performance review.",
+      "tech": [
+        "ServiceNow",
+        "PowerShell",
+        "Workflow Automation"
+      ],
+      "year": 2021,
+      "role": "Developer / IT Support Automation Engineer",
+      "link": null,
+      "repo": null
+    }
+  ]
+}
